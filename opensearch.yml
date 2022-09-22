@@ -7,6 +7,7 @@ cluster.routing.allocation.disk.threshold_enabled: true
 cluster.routing.allocation.disk.watermark.low: 93%
 cluster.routing.allocation.disk.watermark.high: 95%
 
+plugins.security.disabled: false
 plugins.security.allow_unsafe_democertificates: true
 plugins.security.ssl.http.enabled: true
 plugins.security.ssl.http.pemtrustedcas_filepath: certificates/ca/ca.pem
@@ -25,3 +26,5 @@ plugins.security.nodes_dn:
   - 'CN=os05,O=EXAMPLE,L=PARIS,ST=IDF,C=FR'
   - 'CN=os06,O=EXAMPLE,L=PARIS,ST=IDF,C=FR'
   - 'CN=os07,O=EXAMPLE,L=PARIS,ST=IDF,C=FR'
+
+plugins.index_state_management.enabled: true

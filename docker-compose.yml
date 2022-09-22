@@ -4,7 +4,7 @@ services:
 
   os01:
     restart: always
-    image: opensearchproject/opensearch:2.2.1
+    image: opensearchproject/opensearch:2.3.0
     environment:
       OPENSEARCH_JAVA_OPTS: "-Xms1024m -Xmx1024m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
       node.name: os01
@@ -32,7 +32,7 @@ services:
   
   os02:
     restart: always
-    image: opensearchproject/opensearch:2.2.1
+    image: opensearchproject/opensearch:2.3.0
     environment:
       OPENSEARCH_JAVA_OPTS: "-Xms1024m -Xmx1024m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
       node.name: os02
@@ -57,7 +57,7 @@ services:
   
   os03:
     restart: always
-    image: opensearchproject/opensearch:2.2.1
+    image: opensearchproject/opensearch:2.3.0
     environment:
       OPENSEARCH_JAVA_OPTS: "-Xms1024m -Xmx1024m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
       node.name: os03
@@ -82,7 +82,7 @@ services:
   
   kibana:
     restart: always
-    image: opensearchproject/opensearch-dashboards:2.2.1
+    image: opensearchproject/opensearch-dashboards:2.3.0
     ports:
       - 5601:5601
     volumes:
@@ -91,6 +91,29 @@ services:
     environment:
       OPENSEARCH_HOSTS: '["https://os01:9200","https://os02:9200","https://os03:9200"]' # must be a string with no spaces when specified as an environment variable
       DISABLE_INSTALL_DEMO_CONFIG: "true"
+
+  elastichq:
+    restart: always
+    image: elastichq/elasticsearch-hq
+    environment:
+      HQ_DEFAULT_URL: https://admin:admin@os01:9200
+      HQ_DEBUG: "True"
+      HQ_ENABLE_SSL: "True"
+      HQ_VERIFY_CERTS: "True"
+      HQ_CA_CERTS: "/usr/share/opensearch/config/certificates/ca_bundle.crt"
+    volumes:
+      - "./certs:/usr/share/opensearch/config/certificates:ro"
+    ports:
+      - 5000:5000
+
+  cerebro:
+    restart: always
+    image: lmenezes/cerebro
+    ports:
+      - 9000:9000
+    volumes:
+      - "./cacerts:/usr/local/openjdk-11/lib/security/cacerts"
+      #- "./cerebro/application.conf:/opt/cerebro/conf/application.conf"
 
 volumes:
   os-data1:
